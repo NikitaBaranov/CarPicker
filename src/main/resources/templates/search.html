@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}"
+      lang="en"
+>
+<head>
+    <title>Cars</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+
+    <h2>Filters</h2>
+    <div class="container" th:object="${pageOptions}">
+        <form th:action="@{/}" method="post">
+            <div class="row">
+                <div class="col">
+                    <div th:each="make : *{makes}" class="form-check form-switch">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               role="switch"
+                               th:field="*{make}"
+                               th:value="${make.key}"
+                               th:disabled="!${make.value}"
+                               onChange="this.form.submit()">
+                        <label class="form-check-label" th:for="${make.key}" th:text="${make.key}"></label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div th:each="body : *{bodies}" class="form-check form-switch">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               role="switch"
+                               th:field="*{body}"
+                               th:value="${body.key}"
+                               th:disabled="!${body.value}"
+                               onChange="this.form.submit()">
+                        <label class="form-check-label" th:for="${body.key}" th:text="${body.key}"></label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div th:each="drivetrain : *{drivetrains}" class="form-check form-switch">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               role="switch"
+                               th:field="*{drivetrain}"
+                               th:value="${drivetrain.key}"
+                               th:disabled="!${drivetrain.value}"
+                               onChange="this.form.submit()">
+                        <label class="form-check-label" th:for="${drivetrain.key}" th:text="${drivetrain.key}"></label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <h2>Cars</h2>
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div th:each="car : ${cars}" class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${car.make.name} + ' ' + ${car.model}"></h5>
+                        <p class="card-text" th:text="${car.body.name} + ' ' + ${car.drivetrain.name}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

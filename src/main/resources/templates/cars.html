@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}"
+      lang="en"
+>
+<head>
+    <title>Cars</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+
+    <div class="container">
+        <h2>Add</h2>
+        <div class="row" th:object="${carsOptions}">
+            <div class="col-md-11">
+
+                <form th:action="@{/cars-form}" method="post">
+                    <div class="row" th:object="${carsOptions}">
+                        <div class="col-md-2">
+                            <div class="input-group">
+                                <label class="input-group-text" th:for="*{make}">Make</label>
+                                <select class="form-select" th:field="*{make}" onChange="this.form.submit()">
+                                    <option selected value="">Choose...</option>
+                                    <option th:each="make : *{makes}" th:value="${make.name}"
+                                            th:text="${make.name}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="input-group">
+                                <label class="input-group-text" for="model">Model</label>
+                                <input class="form-control" type="text"
+                                       id="model"
+                                       th:field="*{model}"
+                                       onChange="this.form.submit()">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="btn-group" role="group">
+                                <label class="input-group-text" for="body-id">Body</label>
+                                <div id="body-id" th:each="b,iterStat : *{bodies}" th:field="*{body}">
+                                    <input type="radio" class="btn-check" name="body"
+                                           th:id="'body-radio' + ${iterStat.index}"
+                                           th:value="${b.name}"
+                                           th:checked="${b.name} == *{body}"
+                                           autocomplete="off"
+                                           onChange="this.form.submit()">
+                                    <label class="btn btn-outline-primary"
+                                           th:for="'body-radio' + ${iterStat.index}"
+                                           th:text="${b.name}"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="btn-group" role="group">
+                                <label class="input-group-text" for="drivetrain-id">Drivetrain</label>
+                                <div id="drivetrain-id" th:each="d,iterStat : *{drivetrains}" th:field="*{drivetrain}">
+                                    <input type="radio" class="btn-check" name="drivetrain"
+                                           th:id="'drivetrain-radio' + ${iterStat.index}"
+                                           th:value="${d.name}"
+                                           th:checked="${d.name} == *{drivetrain}"
+                                           autocomplete="off"
+                                           onChange="this.form.submit()">
+                                    <label class="btn btn-outline-warning"
+                                           th:for="'drivetrain-radio' + ${iterStat.index}"
+                                           th:text="${d.name}"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-1">
+                <form th:action="@{/cars}" method="post">
+                    <div class="col-md">
+                        <button type="submit"
+                                class="btn btn-outline-success"
+                                th:disabled="${carsOptions.isSubmitDisabled()}"
+                        >Add
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <h2>Cars</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Make</th>
+                <th scope="col">Model</th>
+                <th scope="col">Body</th>
+                <th scope="col">Drivetrain</th>
+            </tr>
+            </thead>
+            <tbody class="table-group-divider">
+            <tr th:each="car : ${cars}">
+                <!--            <th scope="row">1</th>-->
+                <td th:text="${car.make.name}"></td>
+                <td th:text="${car.model}"></td>
+                <td th:text="${car.body.name}"></td>
+                <td th:text="${car.drivetrain.name}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>
